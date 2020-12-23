@@ -37,6 +37,7 @@ public class DeviceRegistration {
 	private String credFileName;
     
 	
+	String credFilePath=System.getProperty("user.dir")+"\\config\\";
     
 	/**
 	 * @param file
@@ -45,8 +46,9 @@ public class DeviceRegistration {
 	 */
     
     public void checkIfDeviceRegistered() {
+    	System.out.print(credFilePath+credFileName);
     	try {
-			File file = new File(System.getProperty("user.dir")+"\\config\\"+credFileName);
+			File file = new File(credFilePath+credFileName);
 	        if(!file.exists()) {
 	        	getDeviceCredentails();
 	        	registerDeviceAndSendMeasurement(file);
@@ -170,7 +172,7 @@ public class DeviceRegistration {
 	                    //	@Override
 	                        public void messageArrived (final String topic, final MqttMessage message) throws Exception {
 	                            final String payload = new String(message.getPayload());
-	                            File file = new File(System.getProperty("user.dir")+"\\config\\cred");
+	                            File file = new File(credFilePath+credFileName);
 	                            if(!file.exists()) {
 	                            	boolean filecreated = file.createNewFile();
 	                            	if (filecreated) {
