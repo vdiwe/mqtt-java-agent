@@ -1,8 +1,11 @@
 package com.c8y.sdk;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Scanner;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -115,6 +118,17 @@ public class DeviceRegistration {
                                System.out.println("Simulating device restart...");
                                client1.publish("s/us", "501,c8y_Restart".getBytes(), 2, false);
                                System.out.println("...restarting...");
+                              /**Execute the windows script**/
+                               Process p = Runtime.getRuntime().exec("cmd /c dir");
+
+                               p.waitFor(); 
+                               BufferedReader reader=new BufferedReader(new InputStreamReader(
+                                           p.getInputStream())); 
+                               String line; 
+                               while((line = reader.readLine()) != null) { 
+                                 System.out.println(line);
+                               } 
+                               /**Execute the Windows script end**/
                                Thread.sleep(TimeUnit.SECONDS.toMillis(5));
                                client1.publish("s/us", "503,c8y_Restart".getBytes(), 2, false);
                                System.out.println("...done...");
@@ -122,7 +136,10 @@ public class DeviceRegistration {
                                e.printStackTrace();
                            } catch (InterruptedException e) {
                                e.printStackTrace();
-                           }
+                           } catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
                        }
                    });
                }else {
